@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">POC-FILTRO-IA</string>
+    <string name="MessageAlertError">Imagen Invalida!</string>
+    <string name="MessageAlertSuccess">Imagen Permitida!</string>
+    <string name="MessageAlertWarning">No hay imagen o Error :(</string>
+    <string name="title_nav_list">Seleccione una opccion</string>
+    <string name="categoria_animal">Maltrato Animal</string>
+    <string name="categoria_pista">Pista en mal estados</string>
+    <string name="categoria_buzon">Buzon Peligroso</string>
+    <string name="categoria_basura">Basura o Desmonte</string>
+    <string name="categoria_infraestructura">Infraestructura Peligrosa</string>
+    <string name="text_button">Analizar Imagen</string>
+</resources>
