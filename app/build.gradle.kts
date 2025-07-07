@@ -37,10 +37,16 @@ android {
     buildFeatures {
         compose = true
     }
+
+    androidResources{
+        noCompress; "tflite"
+        noCompress; "lite"
+    }
 }
 
 dependencies {
-
+    implementation("org.tensorflow:tensorflow-lite:2.17.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

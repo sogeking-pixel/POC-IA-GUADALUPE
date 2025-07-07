@@ -1,4 +1,5 @@
 package com.example.poc_filtro_ia.ui.screen.start
+
 import androidx.compose.material.icons.Icons
 import android.graphics.drawable.Icon
 import android.widget.Space
@@ -52,7 +53,8 @@ val list_options = listOf(
 @Composable
 fun StartScreen(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.background
+    color: Color = MaterialTheme.colorScheme.background,
+    startViewModel: StartViewModel = StartViewModel()
 ){
     Surface(
         modifier = modifier.fillMaxSize().padding(vertical = 35.dp, horizontal = 15.dp ),
