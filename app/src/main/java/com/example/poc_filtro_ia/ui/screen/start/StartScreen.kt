@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -172,7 +173,7 @@ fun ContentStart(
 
         SpaceImagen(
             image = imageState.photoUris,
-            modifier = Modifier.padding(top = 10.dp)
+            modifier = Modifier.padding(top = 10.dp).heightIn(max = 400.dp)
         )
         NavList(
             options = list_options,
@@ -191,7 +192,7 @@ fun ContentStart(
 
         PhotoButton(
             onClick = onTakePhotoLambda,
-            modifier = Modifier.padding(top = 40.dp)
+            modifier = Modifier.padding(top = 30.dp)
         )
     }
 
@@ -213,7 +214,7 @@ fun SpaceImagen(
         Log.d("imagen Changed", "ui link image")
     }
     Image(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(2.dp),
         painter = painter ,
         contentDescription = null
     )
