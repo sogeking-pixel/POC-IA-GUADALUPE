@@ -8,13 +8,17 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.poc_filtro_ia.ComposeFileProvider
 import com.example.poc_filtro_ia.Models.CategoryClassifier
 import com.example.poc_filtro_ia.ui.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.io.IOException
+import androidx.core.graphics.scale
 
 class StartViewModel : ViewModel(){
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
@@ -25,18 +29,24 @@ class StartViewModel : ViewModel(){
 
     fun classifierImage(bitmap: Bitmap, context: Context) {
         _uiState.value = UiState.LoadingTensorFlow
-        Log.d("ModalCustom", "UiState is loading in view model")
 
         try {
+
+            val convertedBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+            val inputSize = 224
+            val bitmapScaled = convertedBitmap.scale(inputSize, inputSize)
+
             val classifier = CategoryClassifier(context)
-            val (label, confidence) = classifier.classify(bitmap)
+            val (label, confidence) = classifier.classify(bitmapScaled)
 
             _imageState.value = ImageState(
                 label = label,
-                confidence = confidence
+                confidence = confidence,
+                photoUris = _imageState.value.photoUris,
+                isAnalyzed = true
             )
 
-            _uiState.value = UiState.Success
+            _uiState.value = UiState.SuccessTensorFlow(label, confidence)
             Log.d("StartViewModel", "Clasificación: $label (${confidence * 100}%)")
 
 
@@ -46,7 +56,25 @@ class StartViewModel : ViewModel(){
 
     }
 
+    fun handlePhotoResult(success: Boolean, uri: Uri, context: Context) {
+        if (success) {
+            takePhoto(uri)
+        } else {
+            viewModelScope.launch {
+                ComposeFileProvider.deleteFileFromCacheDirImages(context, uri)
+            }
+        }
+    }
 
+    suspend fun preparePhotoUri(context: Context): Uri {
+        return ComposeFileProvider.Companion.generateImageUri(context)
+    }
+
+    fun changeCategory(){
+        _imageState.value = _imageState.value.copy(
+            isAnalyzed = false
+        )
+    }
 
 
 
