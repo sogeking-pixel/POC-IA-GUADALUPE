@@ -1,6 +1,6 @@
-buzo
-maltrato animal
-pista mal estado
+Buzon Peligroso
+Maltrato Animal
+Pista en mal estados
 ninguna
-infraestructura peligrosa
-basura
+Infraestructura Peligrosa
+Basura o Desmonte
