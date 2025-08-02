@@ -11,13 +11,14 @@ sealed interface UiState {
     /**
      * Still loading with tensorflow
      */
-    object LoadingTensorFlow : UiState
 
-    object Success : UiState
+    object Loading : UiState
 
     /**
      * scale numeric value between 0 and 1
      */
+
+    object NSFWDetected : UiState
     data class SuccessTensorFlow(val outputText: String, val outputScale: Float) : UiState
 
 
