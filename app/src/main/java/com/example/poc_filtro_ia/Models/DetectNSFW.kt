@@ -17,10 +17,8 @@ class DetectNSFW(context: Context):
     override fun classify(bitmap: Bitmap): Pair<String, Float> {
         val imageProcessor = ImageProcessor.Builder()
             .add(ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
-            .add(NormalizeOp(0f, 255f))
             .build()
-
-        val tensorImage = TensorImage(DataType.FLOAT32)
+        val tensorImage = TensorImage(DataType.UINT8)
         tensorImage.load(bitmap)
         val processedImage = imageProcessor.process(tensorImage)
 

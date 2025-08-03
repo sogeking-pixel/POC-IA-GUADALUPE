@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 import androidx.core.graphics.scale
+import com.example.poc_filtro_ia.Models.DetectNSFW
 
 class StartViewModel : ViewModel(){
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
@@ -28,7 +29,7 @@ class StartViewModel : ViewModel(){
 
 
     fun classifierImage(bitmap: Bitmap, context: Context) {
-        _uiState.value = UiState.LoadingTensorFlow
+        _uiState.value = UiState.Loading
 
         try {
 
@@ -36,18 +37,31 @@ class StartViewModel : ViewModel(){
             val inputSize = 224
             val bitmapScaled = convertedBitmap.scale(inputSize, inputSize)
 
+            val filterNsfw = DetectNSFW(context)
+            val (nsfwLabel: String, nsfwConfidence: Float) = filterNsfw.classify(bitmapScaled)
+            Log.d("ImageCheck", "NSFW Result: $nsfwLabel (Confidence: $nsfwConfidence)")
+            if (nsfwLabel == "nude" && nsfwConfidence > 0.8) {
+                _uiState.value = UiState.NSFWDetected
+                _imageState.value = _imageState.value.copy(
+                    isAnalyzed = true
+                )
+                return
+            }
+
             val classifier = CategoryClassifier(context)
-            val (label, confidence) = classifier.classify(bitmapScaled)
+            val (categoryLabel: String, categoryConfidence: Float) = classifier.classify(bitmapScaled)
+
+            Log.d("ImageCheck", "Category: $categoryLabel (Confidence: $categoryConfidence)")
 
             _imageState.value = ImageState(
-                label = label,
-                confidence = confidence,
+                label = categoryLabel,
+                confidence = categoryConfidence,
                 photoUris = _imageState.value.photoUris,
                 isAnalyzed = true
             )
 
-            _uiState.value = UiState.SuccessTensorFlow(label, confidence)
-            Log.d("StartViewModel", "Clasificación: $label (${confidence * 100}%)")
+            _uiState.value = UiState.SuccessTensorFlow(categoryLabel, categoryConfidence)
+            Log.d("StartViewModel", "Clasificación: $categoryLabel (${categoryConfidence})")
 
 
         } catch (e: IOException) {

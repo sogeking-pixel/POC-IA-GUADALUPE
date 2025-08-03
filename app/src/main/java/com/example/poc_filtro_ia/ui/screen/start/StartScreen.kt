@@ -96,11 +96,20 @@ fun StartScreen(
             )
             if(uiState !is UiState.Initial)
                 when (val currentState = uiState) {
-                    is UiState.LoadingTensorFlow -> {
+                    is UiState.Loading -> {
                         ModalEvent(
                             message = "Analizando imagen…",
                             color = Color(0xFF2196F3),
                         )
+                    }
+                    is UiState.NSFWDetected -> {
+                        if(imageState.isAnalyzed){
+                            ModalEvent(
+                                message = "IMAGEN ES CONTENIDO +18!!!",
+                                color = Color(0xFFFF3700),
+                            )
+                        }
+
                     }
                     is UiState.SuccessTensorFlow -> {
                         if(imageState.isAnalyzed){
