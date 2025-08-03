@@ -40,7 +40,7 @@ class StartViewModel : ViewModel(){
             val filterNsfw = DetectNSFW(context)
             val (nsfwLabel: String, nsfwConfidence: Float) = filterNsfw.classify(bitmapScaled)
             Log.d("ImageCheck", "NSFW Result: $nsfwLabel (Confidence: $nsfwConfidence)")
-            if (nsfwLabel == "nude" && nsfwConfidence > 0.8) {
+            if (nsfwLabel != "neutral") {
                 _uiState.value = UiState.NSFWDetected
                 _imageState.value = _imageState.value.copy(
                     isAnalyzed = true

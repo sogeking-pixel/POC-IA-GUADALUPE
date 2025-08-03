@@ -11,14 +11,14 @@ import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
 
 class DetectNSFW(context: Context):
-    BaseImageClassifier(context, "DetectNSFW/NSFW.tflite", "DetectNSFW/labels.txt") {
+    BaseImageClassifier(context, "DetectNSFW/saved_model.tflite", "DetectNSFW/class_labels.txt") {
 
 
     override fun classify(bitmap: Bitmap): Pair<String, Float> {
         val imageProcessor = ImageProcessor.Builder()
             .add(ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
-            .build()
-        val tensorImage = TensorImage(DataType.UINT8)
+            .add(NormalizeOp(0.0f, 255.0f)) .build()
+        val tensorImage = TensorImage(DataType.FLOAT32)
         tensorImage.load(bitmap)
         val processedImage = imageProcessor.process(tensorImage)
 
